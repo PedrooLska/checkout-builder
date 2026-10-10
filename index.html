@@ -194,21 +194,23 @@ details p{margin-top:10px;color:var(--muted);font-size:14px}
     <div style="font-weight:700;font-size:18px" id="stickyPrice">£39.99</div>
     <div style="font-size:12px;color:#ef4444" id="stickyStock">Only 9 left</div>
   </div>
-  <a href="#" class="buy" style="padding:12px 28px;margin:0;font-size:15px;width:auto">Buy Now</a>
+  <a href="#" id="stickyBuy" class="buy" style="padding:12px 28px;margin:0;font-size:15px;width:auto">Buy Now</a>
 </div>
 
 <script>
 const COLOURS = [
-  { name: "Khaki",       img: "images/color_khaki.jpg" },
-  { name: "Silver Grey", img: "images/color_silver.jpg" },
-  { name: "Cream",       img: "images/color_cream.jpg" },
-  { name: "Blue",        img: "images/color_blue.jpg" },
-  { name: "Dark Grey",   img: "images/color_darkgrey.jpg" },
-  { name: "Green",       img: "images/color_green.jpg" },
-  { name: "Pink",        img: "images/color_pink.jpg" },
-  { name: "Orange",      img: "images/color_orange.jpg" },
-  { name: "Coffee",      img: "images/color_coffee.jpg" }
+  { name: "Khaki",       img: "images/color_khaki.jpg",    DBL: "67671381541183", KNG: "67671381639487" },
+  { name: "Silver Grey", img: "images/color_silver.jpg",   DBL: "67671352181055", KNG: "67671352377663" },
+  { name: "Cream",       img: "images/color_cream.jpg",    DBL: "67671352148287", KNG: "67671352344895" },
+  { name: "Blue",        img: "images/color_blue.jpg",     DBL: "67671352279359", KNG: "67671352475967" },
+  { name: "Dark Grey",   img: "images/color_darkgrey.jpg", DBL: "67671352213823", KNG: "67671352410431" },
+  { name: "Green",       img: "images/color_green.jpg",    DBL: "67671381573951", KNG: "67671381672255" },
+  { name: "Pink",        img: "images/color_pink.jpg",     DBL: "67671352246591", KNG: "67671352443199" },
+  { name: "Orange",      img: "images/color_orange.jpg",   DBL: "67671381606719", KNG: "67671381705023" },
+  { name: "Coffee",      img: "images/color_coffee.jpg",   DBL: "67671352312127", KNG: "67671352508735" }
 ];
+
+const CART_BASE = "https://beauty-up.store/cart/";
 
 const GALLERY = [
   "images/gallery1.jpg",
@@ -231,6 +233,7 @@ const PRICES = {
 
 let currentSize = 'DBL';
 let currentQty = 1;
+let currentColour = 0;
 
 function init() {
   // Gallery thumbs
@@ -258,6 +261,8 @@ function init() {
       document.getElementById('mainImg').src = c.img;
       Array.from(colBox.children).forEach(x => x.classList.remove('on'));
       btn.classList.add('on');
+      currentColour = i;
+      updatePriceUI();
       // clear gallery active
       Array.from(thumbBox.children).forEach(el => el.classList.remove('active'));
     };
@@ -314,6 +319,11 @@ function updatePriceUI() {
   document.getElementById('oldPrice').textContent = '£' + p.old.toFixed(2);
   document.getElementById('buyBtn').textContent = 'Buy it now — £' + total;
   document.getElementById('stickyPrice').textContent = '£' + total;
+
+  const variant = COLOURS[currentColour][currentSize];
+  const url = CART_BASE + variant + ':' + currentQty + window.location.search;
+  document.getElementById('buyBtn').href = url;
+  document.getElementById('stickyBuy').href = url;
 }
 
 function startUrgency() {
